@@ -71,14 +71,8 @@ client.connect(err => {
         const file = req.files.file;
         const name = req.body.name;
         const description = req.body.description;
-        console.log(name, description, file);
-        file.mv(`${__dirname}/services/${file.name}`, err => {
-            if (err) {
-                console.log(err);
-                return res.status(500).send({ msg: 'Failed to upload image' });
-            }
-            return res.send({ name: file.name, path: `${file.name}` })
-        })
+
+
 
         const newImg = file.data;
         const encImg = newImg.toString('base64');
@@ -91,7 +85,7 @@ client.connect(err => {
 
         serviceCollection.insertOne({ name, description, image })
             .then(result => {
-                res.send(result);
+                res.send(result.insertedCount > 0);
             })
     })
 });
